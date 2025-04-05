@@ -175,9 +175,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
 
+    const selectedMaterial = selectMaterial.value ? JSON.parse(selectMaterial.value) : null;
+    const selectedPipe = selectPipe.value ? JSON.parse(selectPipe.value) : null;
+    const strengthKey = selectStrength.value;
+    const l = parseFloat(inputLength.value);
+    const w = parseFloat(inputWidth.value);
+
+    if (!selectedMaterial || !selectedPipe || !strengthKey || isNaN(l) || isNaN(w)) {
+      resultDiv.innerHTML = '<p class="error">Выберите все параметры и введите размеры каркаса.</p>';
+      return;
+    }
+
+    const configFrame = configData.find(item => item.type === 'frame' && item.key === strengthKey);
+    if (!configFrame) {
+      resultDiv.innerHTML = '<p class="error">Выбранная прочность каркаса не найдена.</p>';
+      return;
+    }
 
   }
+  const pipeWidthMeters = selectedPipe.width / 1000;
+  const area = l * w;
+  const space = configFrame.step;
 
+
+  // Расчет листов
+
+  const numLists = Math.ceil(area / selectedMaterial.width);
+
+
+  // Расчет трубы
+
+  const numPipesWidth = Math.ceil(w / (space + pipeWidthMeters)) + 1;
+  const numPipesLength = Math.ceil(l / (space + pipeWidthMeters)) + 1;
+  const totalPipeLength = (numPipesWidth * l) + (numPipesLength * w);
 
 
 });
