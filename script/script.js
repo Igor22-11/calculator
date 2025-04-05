@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const inputSection = createSectionInput(configData, materialsData);
     container.append(inputSection);
+
+    const resultSection = createResultSection();
+    container.append(resultSection);
   }
 
   function createElement(tag, className) {
@@ -127,6 +130,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log(materialsList);
 
+    return section;
+  }
+
+  function createResultSection() {
+    const section = document.createElement('div');
+    section.className = 'result-section';
+    section.innerHTML = `
+        <h2>Результат расчета</h2>
+        <div id="calculation-result">
+            <p>Пожалуйста, введите данные и нажмите "Рассчитать".</p>
+        </div>
+    `;
     return section;
   }
 });
