@@ -76,6 +76,57 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="calculate-button">Рассчитать</button>
 `;
 
+    const selectMaterial = section.querySelector('#select-material');
+    const selectPipe = section.querySelector('#pipe-select');
+    const inputWidth = section.querySelector('#width-input');
+    const inputLength = section.querySelector('#length-input');
+    const selectStrength = section.querySelector('#strength-select');
+
+    const materialsList = materialsData.filter(item => item.type === 'list')
+      .sort((a, b) => a.price - b.price);
+
+    materialsList.forEach(list => {
+      const option = document.createElement('option');
+      option.value = JSON.stringify({ name: list.name, width: list.width, material: list.material, price: list.price });
+      option.textContent = `${list.name} (ширина: ${list.width}м, цена: ${list.price})`;
+      selectMaterial.append(option);
+    });
+
+    const materialsPipe = materialsData.filter(item => item.type === 'pipe')
+      .sort((a, b) => a.price - b.price);
+
+    materialsPipe.forEach(pipe => {
+      const option = document.createElement('option');
+      option.value = JSON.stringify({ name: pipe.name, width: pipe.width, price: pipe.price });
+      option.textContent = `${pipe.name} (сечение: ${pipe.width}мм, цена: ${pipe.price})`;
+      selectPipe.append(option);
+    });
+
+    const frameOptions = configData.filter(item => item.type === 'frame')
+      .sort((a, b) => a.name - b.name);
+    frameOptions.forEach(frame => {
+      const option = document.createElement('option');
+      option.value = frame.key;
+      option.textContent = frame.name;
+      selectStrength.append(option);
+    });
+
+    const constraintWidth = configData.find(item => item.type === 'size' && item.key === 'width');
+    if (constraintWidth) {
+      inputWidth.min = constraintWidth.min;
+      inputWidth.max = constraintWidth.max;
+      inputWidth.step = constraintWidth.step;
+    }
+
+    const lengthConstraint = configData.find(item => item.type === 'size' && item.key === 'length');
+    if (lengthConstraint) {
+      inputLength.min = lengthConstraint.min;
+      inputLength.max = lengthConstraint.max;
+      inputLength.step = lengthConstraint.step;
+    }
+
+    console.log(materialsList);
+
     return section;
   }
 });
