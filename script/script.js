@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
   const rootDiv = document.body;
+  let selectMaterial;
+  let selectPipe;
+  let inputWidth;
+  let inputLength;
+  let selectStrength;
+  let buttonCalculate;
   getData();
 
   async function getData() {
@@ -27,10 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
-
-
-
   function renderCalculator(rootDiv, configData, materialsData) {
     console.log(configData)
     console.log(materialsData)
@@ -43,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const resultSection = createResultSection();
     container.append(resultSection);
+
+    calculationOfMatherials(configData, resultSection.querySelector('#calculation-result'));
   }
 
   function createElement(tag, className) {
@@ -79,11 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
     <button id="calculate-button">Рассчитать</button>
 `;
 
-    const selectMaterial = section.querySelector('#select-material');
-    const selectPipe = section.querySelector('#pipe-select');
-    const inputWidth = section.querySelector('#width-input');
-    const inputLength = section.querySelector('#length-input');
-    const selectStrength = section.querySelector('#strength-select');
+    selectMaterial = section.querySelector('#select-material');
+    selectPipe = section.querySelector('#pipe-select');
+    inputWidth = section.querySelector('#width-input');
+    inputLength = section.querySelector('#length-input');
+    selectStrength = section.querySelector('#strength-select');
 
     const materialsList = materialsData.filter(item => item.type === 'list')
       .sort((a, b) => a.price - b.price);
@@ -144,4 +148,36 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
     return section;
   }
+
+  function calculationOfMatherials(configData, resultDiv) {
+    buttonCalculate = document.getElementById('calculate-button');
+
+    [inputWidth, inputLength].forEach(input => {
+      input.addEventListener('input', () => {
+        const key = input.id.replace('-input', '');
+        const constraints = configData.find(item => item.type === 'size' && item.key === key);
+        const value = parseFloat(input.value);
+        if (constraints && (isNaN(value) || value < constraints.min || value > constraints.max)) {
+          input.classList.add('invalid');
+        } else {
+          input.classList.remove('invalid');
+        }
+      });
+    });
+
+    buttonCalculate.addEventListener('click', () => {
+
+
+      if (inputWidth.classList.contains('invalid') || inputLength.classList.contains('invalid')) {
+        console.log('Push');
+        resultDiv.innerHTML = '<p class="error">Введите корректные значения ширины и длины каркаса.</p>';
+        return;
+      }
+    })
+
+
+  }
+
+
+
 });
