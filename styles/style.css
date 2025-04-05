@@ -1,19 +1,22 @@
 body {
   width: 100vw;
   height: 100vh;
-  overflow-x: hidden;
+  overflow: hidden;
   font-family: "Inter", sans-serif;
   padding: 20px;
   background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
+  align-items: start;
 }
 
-.error{
+.error {
   max-width: 80%;
   margin: 20px auto;
   text-align: center;
 }
 
-.container{
+.container {
   width: auto;
   height: auto;
   border: 1px solid black;
@@ -21,8 +24,71 @@ body {
   display: flex;
   margin: 20px auto;
   padding: 15px;
-  align-items: center;
-  justify-content:space-between;
+  align-items: start;
+  justify-content: space-between;
   gap: 10px;
   background-color: #fff;
+  overflow: hidden;
+}
+
+.invalid {
+  border: 1px solid black;
+  border-color: red !important;
+}
+
+.section-input,
+.result-section {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  justify-content: start;
+}
+
+#calculation-result {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 24px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+}
+
+h3 {
+  font-weight: bold;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+select,
+input[type="number"] {
+  width: 90%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #000000;
+  border-radius: 10px;
+}
+
+button {
+  width: 30%;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: gray;
+  color:#e0e0e0;
+}
+
+
+thead{
+  background: rgb(200, 200, 200);
+}
+thead, tbody, table, td, th {
+  border: 1px solid black;
+  border-collapse:collapse;
 }

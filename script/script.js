@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderCalculator(rootDiv, configData, materialsData) {
-    console.log(configData)
-    console.log(materialsData)
+    // console.log(configData)
+    // console.log(materialsData)
 
     const container = createElement('div', 'container');
     rootDiv.append(container);
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       inputLength.step = lengthConstraint.step;
     }
 
-    console.log(materialsList);
+    // console.log(materialsList);
 
     return section;
   }
@@ -167,47 +167,110 @@ document.addEventListener('DOMContentLoaded', () => {
 
     buttonCalculate.addEventListener('click', () => {
 
-
       if (inputWidth.classList.contains('invalid') || inputLength.classList.contains('invalid')) {
-        console.log('Push');
+        // console.log('Push');
         resultDiv.innerHTML = '<p class="error">Введите корректные значения ширины и длины каркаса.</p>';
         return;
       }
+      const selectedMaterial = selectMaterial.value ? JSON.parse(selectMaterial.value) : null;
+      const selectedPipe = selectPipe.value ? JSON.parse(selectPipe.value) : null;
+      const strengthKey = selectStrength.value;
+      const l = parseFloat(inputLength.value);
+      const w = parseFloat(inputWidth.value);
+
+      if (!selectedMaterial || !selectedPipe || !strengthKey || isNaN(l) || isNaN(w)) {
+        resultDiv.innerHTML = '<p class="error">Выберите все параметры и введите размеры каркаса.</p>';
+        return;
+      }
+
+      const configFrame = configData.find(item => item.type === 'frame' && item.key === strengthKey);
+      if (!configFrame) {
+        resultDiv.innerHTML = '<p class="error">Выбранная прочность каркаса не найдена.</p>';
+        return;
+      }
+      const pipeWidthMeters = selectedPipe.width / 1000;
+      const area = l * w;
+      const space = configFrame.step;
+
+
+      // Расчет листов
+
+      const numLists = Math.ceil(area / selectedMaterial.width);
+
+
+      // Расчет трубы
+
+      const numPipesWidth = Math.ceil(w / (space + pipeWidthMeters)) + 1;
+      const numPipesLength = Math.ceil(l / (space + pipeWidthMeters)) + 1;
+      const totalPipeLength = (numPipesWidth * l) + (numPipesLength * w);
+
+
+      // Расчет саморезов
+
+      const screwsConfig = configData.find(
+        item => item.type === 'fix' && item.key === selectedMaterial.material
+      );
+      const screwsPerSqm = screwsConfig ? screwsConfig.value : 0;
+      const numScrews = Math.ceil(area * screwsPerSqm);
+
+      const totalListCost = numLists * selectedMaterial.price;
+      const totalPipeCost = totalPipeLength * selectedPipe.price;
+
+      const screwPriceConfig = configData.find(item => item.type === 'price' && item.key === 'screw');
+      const screwPrice = screwPriceConfig ? screwPriceConfig.value : 1;
+
+      const totalScrewCost = numScrews * screwPrice;
+      const totalCost = totalListCost + totalPipeCost + totalScrewCost;
+
+      const cellWidth = space;
+      const cellLength = space;
+
+
+
+      let resultHTML = `
+        <h3>Расчет для каркаса размером: ${l.toFixed(2)}м x ${w.toFixed(2)}м</h3>
+        <p>Площадь изделия: ${area.toFixed(2)} м²</p>
+        <p>Расчетный размер ячейки: ${cellLength.toFixed(2)}м x ${cellWidth.toFixed(2)}м (максимальный)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Ед.</th>
+                    <th>Кол-во</th>
+                    <th>Сумма</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${selectedMaterial.name} (ширина ${selectedMaterial.width}м)</td>
+                    <td>м2</td>
+                    <td>${numLists}</td>
+                    <td>${totalListCost.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td>${selectedPipe.name} (сечение ${selectedPipe.width}мм)</td>
+                    <td>мп</td>
+                    <td>${totalPipeLength.toFixed(2)}</td>
+                    <td>${totalPipeCost.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td>Саморез</td>
+                    <td>шт</td>
+                    <td>${numScrews}</td>
+                    <td>${totalScrewCost.toFixed(2)}</td>
+                </tr>
+            </tbody>
+        </table>
+        <h3>Итого: ${totalCost.toFixed(2)}</h3>
+    `;
+
+      resultDiv.innerHTML = resultHTML;
+
     })
 
-    const selectedMaterial = selectMaterial.value ? JSON.parse(selectMaterial.value) : null;
-    const selectedPipe = selectPipe.value ? JSON.parse(selectPipe.value) : null;
-    const strengthKey = selectStrength.value;
-    const l = parseFloat(inputLength.value);
-    const w = parseFloat(inputWidth.value);
 
-    if (!selectedMaterial || !selectedPipe || !strengthKey || isNaN(l) || isNaN(w)) {
-      resultDiv.innerHTML = '<p class="error">Выберите все параметры и введите размеры каркаса.</p>';
-      return;
-    }
-
-    const configFrame = configData.find(item => item.type === 'frame' && item.key === strengthKey);
-    if (!configFrame) {
-      resultDiv.innerHTML = '<p class="error">Выбранная прочность каркаса не найдена.</p>';
-      return;
-    }
 
   }
-  const pipeWidthMeters = selectedPipe.width / 1000;
-  const area = l * w;
-  const space = configFrame.step;
-
-
-  // Расчет листов
-
-  const numLists = Math.ceil(area / selectedMaterial.width);
-
-
-  // Расчет трубы
-
-  const numPipesWidth = Math.ceil(w / (space + pipeWidthMeters)) + 1;
-  const numPipesLength = Math.ceil(l / (space + pipeWidthMeters)) + 1;
-  const totalPipeLength = (numPipesWidth * l) + (numPipesLength * w);
 
 
 });
