@@ -1,7 +1,7 @@
 body {
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
   font-family: "Inter", sans-serif;
   padding: 20px;
   background-color: #e0e0e0;
@@ -28,7 +28,7 @@ body {
   justify-content: space-between;
   gap: 10px;
   background-color: #fff;
-  overflow: hidden;
+  overflow-x: hidden;
 }
 
 .invalid {
@@ -77,7 +77,7 @@ input[type="number"] {
 }
 
 button {
-  width: 30%;
+  width: 100px;
   padding: 10px;
   border-radius: 10px;
   background-color: gray;
@@ -91,4 +91,10 @@ thead{
 thead, tbody, table, td, th {
   border: 1px solid black;
   border-collapse:collapse;
+}
+
+@media (max-width: 800px) {
+  .container {
+    flex-direction: column;
+  }
 }
