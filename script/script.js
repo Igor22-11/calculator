@@ -28,19 +28,54 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+
+
+
+  function renderCalculator(rootDiv, configData, materialsData) {
+    console.log(configData)
+    console.log(materialsData)
+
+    const container = createElement('div', 'container');
+    rootDiv.append(container);
+
+    const inputSection = createSectionInput(configData, materialsData);
+    container.append(inputSection);
+  }
+
+  function createElement(tag, className) {
+    const element = document.createElement(tag);
+    element.className = className;
+    return element;
+  }
+
+
+  function createSectionInput(configData, materialsData) {
+    const section = createElement('div', 'section-input')
+    section.innerHTML = `
+    <h2>Вводные данные</h2>
+    <div>
+        <label for="select-material">Лист покрытия:</label>
+        <select id="select-material"></select>
+    </div>
+    <div>
+        <label for="pipe-select">Труба:</label>
+        <select id="pipe-select"></select>
+    </div>
+    <div>
+        <label for="width-input">Ширина каркаса (м):</label>
+        <input type="number" id="width-input" min="" max="" step="">
+    </div>
+    <div>
+        <label for="length-input">Длина каркаса (м):</label>
+        <input type="number" id="length-input" min="" max="" step="">
+    </div>
+    <div>
+        <label for="strength-select">Прочность каркаса:</label>
+        <select id="strength-select"></select>
+    </div>
+    <button id="calculate-button">Рассчитать</button>
+`;
+
+    return section;
+  }
 });
-
-
-function renderCalculator(rootDiv, configData, materialsData) {
-  console.log(configData)
-  console.log(materialsData)
-
-  const container = createElement('div', 'container');
-  rootDiv.append(container);
-}
-
-function createElement(tag, className) {
-  const element = document.createElement(tag);
-  element.className = className;
-  return element;
-}
