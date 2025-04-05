@@ -1,0 +1,28 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden;
+  font-family: "Inter", sans-serif;
+  padding: 20px;
+  background-color: #e0e0e0;
+}
+
+.error{
+  max-width: 80%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.container{
+  width: auto;
+  height: auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  display: flex;
+  margin: 20px auto;
+  padding: 15px;
+  align-items: center;
+  justify-content:space-between;
+  gap: 10px;
+  background-color: #fff;
+}
